@@ -3,9 +3,10 @@ import { FlatList, Text } from "react-native";
 import CategoryGridTile from "../components/CategoryGridTile";
 
 function CategoriesScreen({ navigation }) {
-    const onPressHandler = (id) => {
+    const onPressHandler = (id, title) => {
         navigation.navigate("Meal Overview", {
             categoryId: id,
+            headerTitle: title,
         });
     };
     return (
@@ -16,7 +17,7 @@ function CategoriesScreen({ navigation }) {
                 <CategoryGridTile
                     title={item.title}
                     color={item.color}
-                    onPress={() => onPressHandler(item.id)}
+                    onPress={() => onPressHandler(item.id, item.title)}
                 />
             )}
             numColumns={2}
