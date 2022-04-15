@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useContext } from "react";
 import {
     View,
     Text,
@@ -10,19 +10,37 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { MEALS } from "../data/dummy-data";
+import { FavouritesContext } from "../store/FavouritesContext";
 function MealDetails({ route, navigation }) {
     const id = route.params.mealId;
     const meal = MEALS.find((meal) => meal.id === id);
 
+    const FavouriteMealsCtx = useContext(FavouritesContext);
+
+    const isFavouriteMeal = FavouriteMealsCtx.ids.includes(id);
+
+    const handleFavouriteStatusContext = () => {
+        console.log("hello");
+        if (isFavouriteMeal) {
+            FavouriteMealsCtx.removeFavouriteMeal(id);
+        } else {
+            FavouriteMealsCtx.addFavouriteMeal(id);
+        }
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Pressable onPress={() => console.log("Pressed!")}>
-                    <Ionicons name="star" size={20} color="black" />
+                <Pressable onPress={handleFavouriteStatusContext}>
+                    <Ionicons
+                        name={isFavouriteMeal ? "star" : "star-outline"}
+                        size={20}
+                        color="black"
+                    />
                 </Pressable>
             ),
         });
-    }, []);
+    }, [navigation, handleFavouriteStatusContext]);
     return (
         <ScrollView>
             <View>
